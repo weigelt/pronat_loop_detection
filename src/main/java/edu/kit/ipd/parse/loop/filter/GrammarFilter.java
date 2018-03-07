@@ -21,6 +21,7 @@ public class GrammarFilter {
 	static final String ATTRIBUTE_NAME_ROLE = "role";
 	static final String ATTRIBUTE_NAME_VALUE = "value";
 	static final String ATTRIBUTE_NAME_POSITION = "position";
+	static final String ATTRIBUTE_CHUNK_NAME = "chunkName";
 	static final String ARC_TYPE_RELATION = "relation";
 	static final String ARC_TYPE_RELATION_IN_ACTION = "relationInAction";
 	static IArcType actionAnalyzerArcType;
