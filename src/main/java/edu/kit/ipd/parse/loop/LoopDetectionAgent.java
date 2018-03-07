@@ -60,7 +60,12 @@ public class LoopDetectionAgent extends AbstractAgent {
 			e.printStackTrace();
 		}
 		//TODO: add optional filter for coref or eventcoref?
-		//writeToGraph(conActions);
+		writeToGraph(loops);
+	}
+
+	private void writeToGraph(List<Loop> loops) {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
