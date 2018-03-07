@@ -9,6 +9,15 @@ public class Loop {
 	private Keyphrase keyphrase;
 	private List<INode> dependentPhrases;
 	private List<INode> dependentActions;
+	private Number iterations;
+
+	public Number getIterations() {
+		return iterations;
+	}
+
+	public void setIterations(Number iterations) {
+		this.iterations = iterations;
+	}
 
 	public Loop() {
 		this.dependentPhrases = new ArrayList<>();

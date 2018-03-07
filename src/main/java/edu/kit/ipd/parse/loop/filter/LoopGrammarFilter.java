@@ -17,7 +17,7 @@ public class LoopGrammarFilter implements ISpecializedGrammarFilter {
 
 		Loop result = null;
 		if (firstLeftAction != null) {
-			result = DependentNodesExtractor.extract(keyphrase, firstLeftAction, firstLeftAction, true);
+			result = LoopDependentNodesExtractor.extract(keyphrase, firstLeftAction, true);
 		} else {
 		}
 		return result;

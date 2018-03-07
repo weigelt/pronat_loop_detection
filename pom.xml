@@ -88,5 +88,10 @@
 			<artifactId>ner</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>edu.kit.ipd.parse</groupId>
+			<artifactId>stanford_number_normalizer</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>
