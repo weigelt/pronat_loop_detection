@@ -97,9 +97,8 @@ public class LoopDetectionAgentTest {
 
 	}
 
-	//@Ignore("copy pasted")
 	@Test
-	public void endingTest() {
+	public void loopTest() {
 		ppd = new PrePipelineData();
 		//@formatter:off
 		String input = "the dog jumps and the horse looks twice";
@@ -118,6 +117,34 @@ public class LoopDetectionAgentTest {
 			Assert.assertEquals(expected[i], node.getAttributeValue("value").toString());
 			i++;
 		}
+		int[] expectedSpan = new int[] { 4, 6 };
+		Assert.assertEquals(expectedSpan[0], loop.getDependentPhrases().get(0).getAttributeValue("position"));
+		Assert.assertEquals(expectedSpan[1],
+				loop.getDependentPhrases().get(loop.getDependentPhrases().size() - 1).getAttributeValue("position"));
+
+	}
+
+	@Test
+	public void loopTimesTest() {
+		ppd = new PrePipelineData();
+		//@formatter:off
+		String input = "the dog jumps and the horse looks two times";
+		//@formatter:on
+		ppd.setMainHypothesis(StringToHypothesis.stringToMainHypothesis(input, true));
+
+		IGraph graph = executePreviousStages(ppd);
+		loopDetectAgent.setGraph(graph);
+		loopDetectAgent.exec();
+		List<Loop> loops = loopDetectAgent.getLoops();
+		Assert.assertEquals(1, loops.size());
+		Loop loop = loops.get(0);
+		String[] expected = new String[] { "two", "times" };
+		int i = 0;
+		for (INode node : loop.getKeyphrase().getAttachedNodes()) {
+			Assert.assertEquals(expected[i], node.getAttributeValue("value").toString());
+			i++;
+		}
+		Assert.assertEquals(new Integer(2), loop.getIterations());
 		int[] expectedSpan = new int[] { 4, 6 };
 		Assert.assertEquals(expectedSpan[0], loop.getDependentPhrases().get(0).getAttributeValue("position"));
 		Assert.assertEquals(expectedSpan[1],
