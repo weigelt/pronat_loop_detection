@@ -98,7 +98,7 @@ public class LoopDetectionAgentTest {
 	}
 
 	@Test
-	public void loopTest() {
+	public void forLoopTest() {
 		ppd = new PrePipelineData();
 		//@formatter:off
 		String input = "the dog jumps and the horse looks twice";
@@ -125,7 +125,7 @@ public class LoopDetectionAgentTest {
 	}
 
 	@Test
-	public void loopTimesTest() {
+	public void forLoopTimesTest() {
 		ppd = new PrePipelineData();
 		//@formatter:off
 		String input = "the dog jumps and the horse looks two times";
