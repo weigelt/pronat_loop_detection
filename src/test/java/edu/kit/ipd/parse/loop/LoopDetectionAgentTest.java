@@ -152,6 +152,40 @@ public class LoopDetectionAgentTest {
 
 	}
 
+	@Test
+	public void whileOpeningTest() {
+		ppd = new PrePipelineData();
+		//@formatter:off
+		String input = "open the fridge and while the fridge is open take out the beverages";
+		//@formatter:on
+		ppd.setMainHypothesis(StringToHypothesis.stringToMainHypothesis(input, true));
+
+		IGraph graph = executePreviousStages(ppd);
+		loopDetectAgent.setGraph(graph);
+		loopDetectAgent.exec();
+		List<Loop> loops = loopDetectAgent.getLoops();
+		Assert.assertEquals(1, loops.size());
+		Loop loop = loops.get(0);
+		String[] expected = new String[] { "and", "while" };
+		int i = 0;
+		for (INode node : loop.getKeyphrase().getAttachedNodes()) {
+			Assert.assertEquals(expected[i], node.getAttributeValue("value").toString());
+			i++;
+		}
+		String[] expectedCondition = new String[] { "the", "fridge", "is", "open" };
+		i = 0;
+		for (INode node : loop.getKeyphrase().getConditionNodes()) {
+			Assert.assertEquals(expectedCondition[i], node.getAttributeValue("value").toString());
+			i++;
+		}
+		//Assert.assertEquals(new Integer(2), loop.getIterations());
+		int[] expectedSpan = new int[] { 9, 12 };
+		Assert.assertEquals(expectedSpan[0], loop.getDependentPhrases().get(0).getAttributeValue("position"));
+		Assert.assertEquals(expectedSpan[1],
+				loop.getDependentPhrases().get(loop.getDependentPhrases().size() - 1).getAttributeValue("position"));
+
+	}
+
 	@Ignore("WIP")
 	@Test
 	public void beachday0002() {
