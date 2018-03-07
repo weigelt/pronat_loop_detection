@@ -86,27 +86,17 @@ public class GrammarFilter {
 		return (int) node.getAttributeValue(ATTRIBUTE_NAME_POSITION);
 	}
 
-	static boolean findActionNodes(INode[] actions, boolean left) {
-		boolean foundAnd = false;
-		while ((left ? !actions[0].getIncomingArcsOfType(GrammarFilter.nextArcType).isEmpty()
-				: !actions[0].getOutgoingArcsOfType(GrammarFilter.nextArcType).isEmpty()) && actions[2] == null) {
-			actions[0] = left ? actions[0].getIncomingArcsOfType(GrammarFilter.nextArcType).get(0).getSourceNode()
-					: actions[0].getOutgoingArcsOfType(GrammarFilter.nextArcType).get(0).getTargetNode();
-			if (actions[0].getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_ROLE) != null
-					&& actions[0].getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_ROLE).toString()
+	static INode findActionNodes(INode start, boolean left) {
+		while (left ? !start.getIncomingArcsOfType(GrammarFilter.nextArcType).isEmpty()
+				: !start.getOutgoingArcsOfType(GrammarFilter.nextArcType).isEmpty()) {
+			start = left ? start.getIncomingArcsOfType(GrammarFilter.nextArcType).get(0).getSourceNode()
+					: start.getOutgoingArcsOfType(GrammarFilter.nextArcType).get(0).getTargetNode();
+			if (start.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_ROLE) != null
+					&& start.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_ROLE).toString()
 							.equalsIgnoreCase(GrammarFilter.ATTRIBUTE_VALUE_PREDICATE)) {
-				if (actions[1] == null) {
-					actions[1] = actions[0];
-				} else {
-					actions[2] = actions[0];
-				}
-			}
-			if (actions[1] != null) {
-				if (actions[0].getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_VALUE).toString().equalsIgnoreCase(GrammarFilter.WORD_AND)) {
-					foundAnd = true;
-				}
+				return start;
 			}
 		}
-		return foundAnd;
+		return null;
 	}
 }
