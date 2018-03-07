@@ -10,14 +10,12 @@ public class ForLoopGrammarFilter implements ISpecializedGrammarFilter {
 	@Override
 	public Loop filter(Keyphrase keyphrase) throws MissingDataException {
 
-		INode[] leftActions = new INode[3];
-		leftActions[0] = keyphrase.getAttachedNodes().get(0);
-		boolean leftAnd = GrammarFilter.findActionNodes(leftActions, true);
-		INode firstLeftAction = leftActions[1];
+		INode start = keyphrase.getAttachedNodes().get(0);
+		INode leftAction = GrammarFilter.findActionNodes(start, true);
 
 		Loop result = null;
-		if (firstLeftAction != null) {
-			result = LoopDependentNodesExtractor.extract(keyphrase, firstLeftAction, true);
+		if (leftAction != null) {
+			result = LoopDependentNodesExtractor.extract(keyphrase, leftAction, true);
 		} else {
 		}
 		return result;
