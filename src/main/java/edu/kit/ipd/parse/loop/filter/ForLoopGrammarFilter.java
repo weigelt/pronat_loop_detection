@@ -7,6 +7,12 @@ import edu.kit.ipd.parse.luna.graph.INode;
 
 public class ForLoopGrammarFilter implements ISpecializedGrammarFilter {
 
+	LoopDependentNodesExtractor ldne;
+
+	public ForLoopGrammarFilter() {
+		ldne = new ForLoopDependentNodesExtractor();
+	}
+
 	@Override
 	public Loop filter(Keyphrase keyphrase) throws MissingDataException {
 
@@ -15,7 +21,7 @@ public class ForLoopGrammarFilter implements ISpecializedGrammarFilter {
 
 		Loop result = null;
 		if (leftAction != null) {
-			result = LoopDependentNodesExtractor.extract(keyphrase, leftAction, true);
+			result = ldne.extract(keyphrase, leftAction, true);
 		} else {
 		}
 		return result;
