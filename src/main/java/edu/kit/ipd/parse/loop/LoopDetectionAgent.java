@@ -68,7 +68,7 @@ public class LoopDetectionAgent extends AbstractAgent {
 	 *
 	 * @return
 	 */
-	public List<Loop> getConcurrentActions() {
+	public List<Loop> getLoops() {
 		return loops;
 	}
 
