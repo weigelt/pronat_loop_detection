@@ -41,7 +41,7 @@ public class GrammarFilter {
 				//spg = new WrappingGrammarFilter();
 				break;
 			case LOOP:
-				spg = new LoopGrammarFilter();
+				spg = new ForLoopGrammarFilter();
 				break;
 			case OPENING:
 				//spg = new OpeningGrammarFilter();

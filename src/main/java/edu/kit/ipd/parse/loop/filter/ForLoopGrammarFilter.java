@@ -5,7 +5,7 @@ import edu.kit.ipd.parse.loop.data.Loop;
 import edu.kit.ipd.parse.luna.data.MissingDataException;
 import edu.kit.ipd.parse.luna.graph.INode;
 
-public class LoopGrammarFilter implements ISpecializedGrammarFilter {
+public class ForLoopGrammarFilter implements ISpecializedGrammarFilter {
 
 	@Override
 	public Loop filter(Keyphrase keyphrase) throws MissingDataException {
