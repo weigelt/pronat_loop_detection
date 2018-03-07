@@ -94,13 +94,27 @@ public class KeyphraseFilter {
 			Keyphrase result) {
 		if (utteranceAsNodeList.size() >= nodeIndex || kpIndex >= keyphrase.size()) {
 			INode currNode = utteranceAsNodeList.get(nodeIndex);
-			if (currNode.getAttributeValue("value").toString().equalsIgnoreCase(keyphrase.get(kpIndex))) {
+			String pos = posTag(keyphrase.get(kpIndex));
+			if (currNode.getAttributeValue("value").toString().equalsIgnoreCase(keyphrase.get(kpIndex))
+					|| currNode.getAttributeValue("pos").toString().equalsIgnoreCase(pos)) {
 				result.addNode(currNode);
 				if (kpIndex == keyphrase.size() - 1) {
 					return result;
 				} else {
 					return recursiveKeyphraseFind(utteranceAsNodeList, nodeIndex + 1, keyphrase, kpIndex + 1, result);
 				}
+			}
+		}
+		return null;
+	}
+
+	private String posTag(String input) {
+		if (input.startsWith("[") && input.endsWith("]")) {
+			String result = input.replace("[", "");
+			result = result.replace("]", "");
+			result.trim();
+			if (result.equals(result.toUpperCase())) {
+				return result;
 			}
 		}
 		return null;
