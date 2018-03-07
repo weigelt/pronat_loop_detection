@@ -186,6 +186,41 @@ public class LoopDetectionAgentTest {
 
 	}
 
+	@Ignore("triggers IndexOutOfBoundsException at edu.kit.ipd.parse.loop.filter.LoopDependentNodesExtractor.constructLoop:LoopDependentNodesExtractor.java:26")
+	@Test
+	public void whileEndingTest() {
+		ppd = new PrePipelineData();
+		//@formatter:off
+		String input = "open the fridge and take out the beverages until the fridge is blue";
+		//@formatter:on
+		ppd.setMainHypothesis(StringToHypothesis.stringToMainHypothesis(input, true));
+
+		IGraph graph = executePreviousStages(ppd);
+		loopDetectAgent.setGraph(graph);
+		loopDetectAgent.exec();
+		List<Loop> loops = loopDetectAgent.getLoops();
+		Assert.assertEquals(1, loops.size());
+		Loop loop = loops.get(0);
+		String[] expected = new String[] { "until" };
+		int i = 0;
+		for (INode node : loop.getKeyphrase().getAttachedNodes()) {
+			Assert.assertEquals(expected[i], node.getAttributeValue("value").toString());
+			i++;
+		}
+		String[] expectedCondition = new String[] { "the", "fridge", "is", "closed" };
+		i = 0;
+		for (INode node : loop.getKeyphrase().getConditionNodes()) {
+			Assert.assertEquals(expectedCondition[i], node.getAttributeValue("value").toString());
+			i++;
+		}
+		//Assert.assertEquals(new Integer(2), loop.getIterations());
+		int[] expectedSpan = new int[] { 4, 7 };
+		Assert.assertEquals(expectedSpan[0], loop.getDependentPhrases().get(0).getAttributeValue("position"));
+		Assert.assertEquals(expectedSpan[1],
+				loop.getDependentPhrases().get(loop.getDependentPhrases().size() - 1).getAttributeValue("position"));
+
+	}
+
 	@Ignore("WIP")
 	@Test
 	public void beachday0002() {
