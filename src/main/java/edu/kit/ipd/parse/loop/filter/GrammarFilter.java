@@ -37,18 +37,18 @@ public class GrammarFilter {
 		List<Loop> conActions = new ArrayList<>();
 		for (Keyphrase keyphrase : keyphrases) {
 			switch (keyphrase.getPrimaryType()) {
-			//			case WRAPPING:
-			//				spg = new WrappingGrammarFilter();
-			//				break;
-			//			case SEPARATING:
-			//				spg = new SeparatingGrammarFilter();
-			//				break;
-			//			case OPENING:
-			//				spg = new OpeningGrammarFilter();
-			//				break;
-			//			case ENDING:
-			//				spg = new EndingGrammarFilter();
-			//				break;
+			case WRAPPING:
+				//spg = new WrappingGrammarFilter();
+				break;
+			case LOOP:
+				spg = new LoopGrammarFilter();
+				break;
+			case OPENING:
+				//spg = new OpeningGrammarFilter();
+				break;
+			case ENDING:
+				//spg = new EndingGrammarFilter();
+				break;
 			default:
 				break;
 			}
