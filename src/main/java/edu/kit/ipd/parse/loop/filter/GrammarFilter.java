@@ -39,16 +39,16 @@ public class GrammarFilter {
 		for (Keyphrase keyphrase : keyphrases) {
 			switch (keyphrase.getPrimaryType()) {
 			case WRAPPING:
-				//spg = new WrappingGrammarFilter();
+				spg = new WrappingWhileLoopGrammarFilter();
 				break;
 			case LOOP:
 				spg = new ForLoopGrammarFilter();
 				break;
 			case OPENING:
-				//spg = new OpeningGrammarFilter();
+				spg = new OpeningWhileLoopGrammarFilter();
 				break;
 			case ENDING:
-				//spg = new EndingGrammarFilter();
+				spg = new EndingWhileLoopGrammarFilter();
 				break;
 			default:
 				break;
