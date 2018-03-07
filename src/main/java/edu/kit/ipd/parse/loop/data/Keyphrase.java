@@ -9,6 +9,7 @@ public class Keyphrase {
 
 	KeyphraseType priType = KeyphraseType.UNSET, secType = KeyphraseType.UNSET;
 	List<INode> attachedNodes;
+	List<INode> condition;
 
 	public Keyphrase(KeyphraseType priType) {
 		this.priType = priType;
@@ -48,6 +49,21 @@ public class Keyphrase {
 
 	public void addNode(INode newNode) {
 		attachedNodes.add(newNode);
+	}
+
+	/**
+	 * @return the attachedNode
+	 */
+	public List<INode> getConditionNodes() {
+		return condition;
+	}
+
+	public void setConditionNodes(List<INode> condition) {
+		this.condition = condition;
+	}
+
+	public void addConditionNode(INode newNode) {
+		condition.add(newNode);
 	}
 
 	@Override
