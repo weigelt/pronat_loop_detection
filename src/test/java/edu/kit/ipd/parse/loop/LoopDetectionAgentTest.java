@@ -1,6 +1,5 @@
 package edu.kit.ipd.parse.loop;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
@@ -51,12 +50,11 @@ public class LoopDetectionAgentTest {
 		loopDetectAgent.init();
 	}
 
-	@Ignore("copy pasted")
 	@Test
-	public void separatingTest() {
+	public void wrappingTest() {
 		ppd = new PrePipelineData();
 		//@formatter:off
-		String input = "the robot grabs a cup meanwhile Jack goes to the fridge";
+		String input = "open the fridge while the fridge and the dishwasher are white";
 		//@formatter:on
 		ppd.setMainHypothesis(StringToHypothesis.stringToMainHypothesis(input, true));
 
@@ -66,34 +64,22 @@ public class LoopDetectionAgentTest {
 		List<Loop> loops = loopDetectAgent.getLoops();
 		Assert.assertEquals(1, loops.size());
 		Loop loop = loops.get(0);
-		String[] expected = new String[] { "meanwhile" };
+		String[] expected = new String[] { "while" };
 		int i = 0;
 		for (INode node : loop.getKeyphrase().getAttachedNodes()) {
 			Assert.assertEquals(expected[i], node.getAttributeValue("value").toString());
 			i++;
 		}
-		int[] expectedSpanBefore = new int[] { 0, 4 };
-		int[] expectedSpanAfter = new int[] { 6, 9 };
-		int lastBefore = 0;
-		int index = 0;
-		Assert.assertEquals("Before span does not start where expected", expectedSpanBefore[0],
-				loop.getDependentPhrases().get(0).getAttributeValue("position"));
-		for (INode node : loop.getDependentPhrases()) {
-			int nodePosition = (int) node.getAttributeValue("position");
-			boolean isInsideSpan = expectedSpanBefore[0] <= nodePosition && nodePosition <= expectedSpanBefore[1];
-			if (lastBefore == 0 && isInsideSpan == false) {
-				Assert.assertEquals("Before span does not end where expected", expectedSpanBefore[1],
-						loop.getDependentPhrases().get(index - 1).getAttributeValue("position"));
-				lastBefore = index - 1;
-				Assert.assertEquals("After span does start not where expected", expectedSpanAfter[0], nodePosition);
-			}
-			isInsideSpan = isInsideSpan || expectedSpanAfter[0] <= nodePosition && nodePosition <= expectedSpanAfter[1];
-			Assert.assertTrue("Dependent Node at position " + nodePosition + " is not inside expected spans: "
-					+ Arrays.toString(expectedSpanBefore) + ", " + Arrays.toString(expectedSpanAfter), isInsideSpan);
-			index++;
-		}
-		Assert.assertEquals("After span does not end where expected", expectedSpanAfter[1],
+		int[] expectedSpanDependentNodes = new int[] { 0, 2 };
+
+		Assert.assertEquals(expectedSpanDependentNodes[0], loop.getDependentPhrases().get(0).getAttributeValue("position"));
+		Assert.assertEquals(expectedSpanDependentNodes[1],
 				loop.getDependentPhrases().get(loop.getDependentPhrases().size() - 1).getAttributeValue("position"));
+
+		int[] expectedSpanCondition = new int[] { 4, 10 };
+		Assert.assertEquals(expectedSpanCondition[0], loop.getKeyphrase().getConditionNodes().get(0).getAttributeValue("position"));
+		Assert.assertEquals(expectedSpanCondition[1], loop.getKeyphrase().getConditionNodes()
+				.get(loop.getKeyphrase().getConditionNodes().size() - 1).getAttributeValue("position"));
 
 	}
 
