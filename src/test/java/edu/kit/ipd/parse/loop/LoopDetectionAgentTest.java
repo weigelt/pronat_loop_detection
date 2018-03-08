@@ -186,7 +186,6 @@ public class LoopDetectionAgentTest {
 
 	}
 
-	@Ignore("triggers IndexOutOfBoundsException at edu.kit.ipd.parse.loop.filter.LoopDependentNodesExtractor.constructLoop:LoopDependentNodesExtractor.java:26")
 	@Test
 	public void whileEndingTest() {
 		ppd = new PrePipelineData();
@@ -207,7 +206,7 @@ public class LoopDetectionAgentTest {
 			Assert.assertEquals(expected[i], node.getAttributeValue("value").toString());
 			i++;
 		}
-		String[] expectedCondition = new String[] { "the", "fridge", "is", "closed" };
+		String[] expectedCondition = new String[] { "the", "fridge", "is", "blue" };
 		i = 0;
 		for (INode node : loop.getKeyphrase().getConditionNodes()) {
 			Assert.assertEquals(expectedCondition[i], node.getAttributeValue("value").toString());
