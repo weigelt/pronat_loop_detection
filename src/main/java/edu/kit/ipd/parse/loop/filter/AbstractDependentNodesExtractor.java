@@ -47,6 +47,12 @@ public abstract class AbstractDependentNodesExtractor {
 				if (GrammarFilter.getPositionOfNode(currTargetNode) > end) {
 					while (currTargetNode.getOutgoingArcsOfType(GrammarFilter.actionAnalyzerArcType).size() > 0) {
 						if (currTargetNode.getOutgoingArcsOfType(GrammarFilter.actionAnalyzerArcType).size() == 1) {
+							if (left && GrammarFilter.getPositionOfNode(currTargetNode
+									.getOutgoingArcsOfType(GrammarFilter.actionAnalyzerArcType).get(0).getTargetNode()) >= GrammarFilter
+											.getPositionOfNode(keyphrase.getAttachedNodes().get(0))) {
+								break;
+
+							}
 							currTargetNode = currTargetNode.getOutgoingArcsOfType(GrammarFilter.actionAnalyzerArcType).get(0)
 									.getTargetNode();
 						} else if (currTargetNode.getOutgoingArcsOfType(GrammarFilter.actionAnalyzerArcType).size() > 1) {
