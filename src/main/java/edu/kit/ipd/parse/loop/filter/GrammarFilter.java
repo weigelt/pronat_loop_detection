@@ -6,6 +6,7 @@ import java.util.List;
 import edu.kit.ipd.parse.loop.data.Keyphrase;
 import edu.kit.ipd.parse.loop.data.Loop;
 import edu.kit.ipd.parse.luna.data.MissingDataException;
+import edu.kit.ipd.parse.luna.graph.IArc;
 import edu.kit.ipd.parse.luna.graph.IArcType;
 import edu.kit.ipd.parse.luna.graph.INode;
 import edu.kit.ipd.parse.luna.graph.ParseGraph;
@@ -94,10 +95,21 @@ public class GrammarFilter {
 					: start.getOutgoingArcsOfType(GrammarFilter.nextArcType).get(0).getTargetNode();
 			if (start.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_ROLE) != null
 					&& start.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_ROLE).toString()
-							.equalsIgnoreCase(GrammarFilter.ATTRIBUTE_VALUE_PREDICATE)) {
+							.equalsIgnoreCase(GrammarFilter.ATTRIBUTE_VALUE_PREDICATE)
+					&& !hasIncomingInsideChunkArcs(start)) {
 				return start;
 			}
 		}
 		return null;
+	}
+
+	private static boolean hasIncomingInsideChunkArcs(INode start) {
+		List<? extends IArc> actionArcs;
+		if (!(actionArcs = start.getIncomingArcsOfType(actionAnalyzerArcType)).isEmpty()) {
+			if (actionArcs.get(0).getAttributeValue("type").toString().equals("INSIDE_CHUNK")) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
