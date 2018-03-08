@@ -1,6 +1,7 @@
 package edu.kit.ipd.parse.loop.filter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.kit.ipd.parse.loop.data.Keyphrase;
@@ -8,59 +9,68 @@ import edu.kit.ipd.parse.luna.graph.INode;
 
 public class StatementExtractor {
 
+	private static final List<String> NOUN_BLOCK = Arrays.asList("NP", "[CC]");
+	private static final List<String> VERB_PHRASE = Arrays.asList("VP");
+	private static final List<String> ADJP_PHRASE = Arrays.asList("ADJP");
+
 	public static boolean extract(Keyphrase keyphrase) {
-		//TODO: refactor me, every moment in my life is pure pain!
 		INode endOfKP = keyphrase.getAttachedNodes().get(keyphrase.getAttachedNodes().size() - 1);
 		if (endOfKP.getOutgoingArcsOfType(GrammarFilter.nextArcType).isEmpty()) {
 			return false;
 		}
-		INode nextNode = endOfKP.getOutgoingArcsOfType(GrammarFilter.nextArcType).get(0).getTargetNode();
 		List<INode> conditionalNodes = new ArrayList<>();
-		if (!nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_CHUNK_NAME).equals("NP")) {
+		INode nextNode = endOfKP.getOutgoingArcsOfType(GrammarFilter.nextArcType).get(0).getTargetNode();
+
+		nextNode = getEndNodeOfChunk(nextNode, NOUN_BLOCK, conditionalNodes);
+		nextNode = getEndNodeOfChunk(nextNode, VERB_PHRASE, conditionalNodes);
+		nextNode = getEndNodeOfChunk(nextNode, ADJP_PHRASE, conditionalNodes);
+
+		if (nextNode == null) {
 			return false;
-		} else {
-			conditionalNodes.add(nextNode);
-		}
-		while (!nextNode.getOutgoingArcsOfType(GrammarFilter.nextArcType).isEmpty()) {
-			nextNode = nextNode.getOutgoingArcsOfType(GrammarFilter.nextArcType).get(0).getTargetNode();
-			if (nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_CHUNK_NAME).equals("NP")
-					|| nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_CHUNK_NAME).equals("CONJ")) {
-				conditionalNodes.add(nextNode);
-			} else {
-				break;
-			}
 		}
 
-		if (!nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_CHUNK_NAME).equals("VP")) {
-			return false;
-		} else {
-			conditionalNodes.add(nextNode);
-		}
-
-		while (!nextNode.getOutgoingArcsOfType(GrammarFilter.nextArcType).isEmpty()) {
-			nextNode = nextNode.getOutgoingArcsOfType(GrammarFilter.nextArcType).get(0).getTargetNode();
-			if (nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_CHUNK_NAME).equals("VP")) {
-				conditionalNodes.add(nextNode);
-			} else {
-				break;
-			}
-		}
-
-		if (!nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_CHUNK_NAME).equals("ADJP")) {
-			return false;
-		} else {
-			conditionalNodes.add(nextNode);
-		}
-
-		while (!nextNode.getOutgoingArcsOfType(GrammarFilter.nextArcType).isEmpty()) {
-			nextNode = nextNode.getOutgoingArcsOfType(GrammarFilter.nextArcType).get(0).getTargetNode();
-			if (nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_CHUNK_NAME).equals("ADJP")) {
-				conditionalNodes.add(nextNode);
-			} else {
-				break;
-			}
-		}
 		keyphrase.setConditionNodes(conditionalNodes);
 		return true;
+	}
+
+	private static INode getEndNodeOfChunk(INode start, List<String> chunktypes, List<INode> conditionalNodes) {
+		if (start == null) {
+			return null;
+		}
+		if (!start.getAttributeValue(GrammarFilter.ATTRIBUTE_CHUNK_NAME).equals(chunktypes.get(0))) {
+			return null;
+		} else {
+			conditionalNodes.add(start);
+		}
+		INode nextNode = start;
+		while (!nextNode.getOutgoingArcsOfType(GrammarFilter.nextArcType).isEmpty()) {
+			nextNode = nextNode.getOutgoingArcsOfType(GrammarFilter.nextArcType).get(0).getTargetNode();
+			boolean isOfType = false;
+			for (String chunktype : chunktypes) {
+				String posTag = posTag(chunktype);
+				if ((posTag != null && nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_POS).equals(posTag))
+						|| nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_CHUNK_NAME).equals(chunktype)) {
+					isOfType = true;
+				}
+			}
+			if (isOfType) {
+				conditionalNodes.add(nextNode);
+			} else {
+				break;
+			}
+		}
+		return nextNode;
+	}
+
+	private static String posTag(String input) {
+		if (input.startsWith("[") && input.endsWith("]")) {
+			String result = input.replace("[", "");
+			result = result.replace("]", "");
+			result.trim();
+			if (result.equals(result.toUpperCase())) {
+				return result;
+			}
+		}
+		return null;
 	}
 }

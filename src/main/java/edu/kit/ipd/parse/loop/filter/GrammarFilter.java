@@ -20,6 +20,7 @@ public class GrammarFilter {
 	static final String ATTRIBUTE_VALUE_PREDICATE_TO_PARA = "PREDICATE_TO_PARA";
 	static final String ATTRIBUTE_VALUE_INSIDE_CHUNK = "INSIDE_CHUNK";
 	static final String ATTRIBUTE_NAME_TYPE = "type";
+	static final String ATTRIBUTE_NAME_POS = "pos";
 	static final String ATTRIBUTE_NAME_ROLE = "role";
 	static final String ATTRIBUTE_NAME_VALUE = "value";
 	static final String ATTRIBUTE_NAME_POSITION = "position";
