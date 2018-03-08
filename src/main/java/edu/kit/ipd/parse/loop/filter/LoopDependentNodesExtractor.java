@@ -22,10 +22,10 @@ public class LoopDependentNodesExtractor extends AbstractDependentNodesExtractor
 		result.addDependentAction(action);
 		result.addDependentPhrase(start);
 		INode currNode = start;
-		do {
+		while (currNode != end && !currNode.getOutgoingArcsOfType(GrammarFilter.nextArcType).isEmpty()) {
 			currNode = currNode.getOutgoingArcsOfType(GrammarFilter.nextArcType).get(0).getTargetNode();
 			result.addDependentPhrase(currNode);
-		} while (currNode != end);
+		}
 		return result;
 	}
 }
