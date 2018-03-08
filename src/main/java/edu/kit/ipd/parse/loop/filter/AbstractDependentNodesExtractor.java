@@ -32,19 +32,19 @@ public abstract class AbstractDependentNodesExtractor {
 		return depNodeBegin;
 	}
 
-	protected static INode determineEnd(Keyphrase keyphrase, INode endingAction, boolean left) {
+	protected static INode determineEnd(Keyphrase keyphrase, INode endingAction, boolean left) throws MissingDataException {
 		INode depNodeEnd = endingAction;
-		int end = (int) endingAction.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_POSITION);
+		int end = GrammarFilter.getPositionOfNode(endingAction);
 		List<? extends IArc> outgoingFirstActionArcs = endingAction.getOutgoingArcsOfType(GrammarFilter.actionAnalyzerArcType);
 		for (IArc iArc : outgoingFirstActionArcs) {
 			if (iArc.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_TYPE).toString()
 					.equalsIgnoreCase(GrammarFilter.ATTRIBUTE_VALUE_PREDICATE_TO_PARA)) {
 				INode currTargetNode = iArc.getTargetNode();
-				if (left && (int) currTargetNode.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_POSITION) >= (int) keyphrase
-						.getAttachedNodes().get(0).getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_POSITION)) {
+				if (left && GrammarFilter.getPositionOfNode(currTargetNode) >= GrammarFilter
+						.getPositionOfNode(keyphrase.getAttachedNodes().get(0))) {
 					continue;
 				}
-				if ((int) currTargetNode.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_POSITION) > end) {
+				if (GrammarFilter.getPositionOfNode(currTargetNode) > end) {
 					while (currTargetNode.getOutgoingArcsOfType(GrammarFilter.actionAnalyzerArcType).size() > 0) {
 						if (currTargetNode.getOutgoingArcsOfType(GrammarFilter.actionAnalyzerArcType).size() == 1) {
 							currTargetNode = currTargetNode.getOutgoingArcsOfType(GrammarFilter.actionAnalyzerArcType).get(0)
@@ -53,7 +53,7 @@ public abstract class AbstractDependentNodesExtractor {
 							//TODO what iff the assumption (we only have a INSIDE_CHUNK node) doesn't hold?
 						}
 					}
-					end = (int) currTargetNode.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_POSITION);
+					end = GrammarFilter.getPositionOfNode(currTargetNode);
 					depNodeEnd = currTargetNode;
 				}
 			} else {
