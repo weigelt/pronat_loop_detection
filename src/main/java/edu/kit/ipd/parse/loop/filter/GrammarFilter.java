@@ -18,6 +18,7 @@ public class GrammarFilter {
 	static final String WORD_AND = "and";
 	static final String ATTRIBUTE_VALUE_PREDICATE = "PREDICATE";
 	static final String ATTRIBUTE_VALUE_PREDICATE_TO_PARA = "PREDICATE_TO_PARA";
+	static final String ATTRIBUTE_VALUE_INSIDE_CHUNK = "INSIDE_CHUNK";
 	static final String ATTRIBUTE_NAME_TYPE = "type";
 	static final String ATTRIBUTE_NAME_ROLE = "role";
 	static final String ATTRIBUTE_NAME_VALUE = "value";
@@ -106,7 +107,7 @@ public class GrammarFilter {
 	private static boolean hasIncomingInsideChunkArcs(INode start) {
 		List<? extends IArc> actionArcs;
 		if (!(actionArcs = start.getIncomingArcsOfType(actionAnalyzerArcType)).isEmpty()) {
-			if (actionArcs.get(0).getAttributeValue("type").toString().equals("INSIDE_CHUNK")) {
+			if (actionArcs.get(0).getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_TYPE).toString().equals(ATTRIBUTE_VALUE_INSIDE_CHUNK)) {
 				return true;
 			}
 		}
