@@ -2,6 +2,7 @@ package edu.kit.ipd.parse.loop.filter;
 
 import edu.kit.ipd.parse.loop.data.Keyphrase;
 import edu.kit.ipd.parse.loop.data.Loop;
+import edu.kit.ipd.parse.loop.data.LoopType;
 import edu.kit.ipd.parse.luna.data.MissingDataException;
 
 public class WrappingWhileLoopGrammarFilter extends AbstractWhileLoopGrammarFilter {
@@ -21,6 +22,7 @@ public class WrappingWhileLoopGrammarFilter extends AbstractWhileLoopGrammarFilt
 		if (result == null) {
 			result = ewlgf.constructLoop(keyphrase);
 		}
+		result.setType(LoopType.DO_WHILE);
 		return result;
 	}
 

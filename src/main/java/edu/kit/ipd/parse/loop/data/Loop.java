@@ -10,18 +10,12 @@ public class Loop {
 	private List<INode> dependentPhrases;
 	private List<INode> dependentActions;
 	private Number iterations;
-
-	public Number getIterations() {
-		return iterations;
-	}
-
-	public void setIterations(Number iterations) {
-		this.iterations = iterations;
-	}
+	private LoopType type;
 
 	public Loop() {
 		this.dependentPhrases = new ArrayList<>();
 		this.dependentActions = new ArrayList<>();
+		type = LoopType.UNSET;
 	}
 
 	/**
@@ -113,5 +107,28 @@ public class Loop {
 			}
 		}
 		return out;
+	}
+
+	public Number getIterations() {
+		return iterations;
+	}
+
+	public void setIterations(Number iterations) {
+		this.iterations = iterations;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public LoopType getType() {
+		return type;
+	}
+
+	/**
+	 * @param type
+	 *            the type to set
+	 */
+	public void setType(LoopType type) {
+		this.type = type;
 	}
 }

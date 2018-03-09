@@ -2,6 +2,7 @@ package edu.kit.ipd.parse.loop.filter;
 
 import edu.kit.ipd.parse.loop.data.Keyphrase;
 import edu.kit.ipd.parse.loop.data.Loop;
+import edu.kit.ipd.parse.loop.data.LoopType;
 import edu.kit.ipd.parse.luna.data.MissingDataException;
 import edu.kit.ipd.parse.luna.graph.INode;
 
@@ -18,7 +19,9 @@ public class EndingWhileLoopGrammarFilter extends AbstractWhileLoopGrammarFilter
 		if (leftAction == null) {
 			return null;
 		} else {
-			return ldne.extract(keyphrase, leftAction, true);
+			Loop result = ldne.extract(keyphrase, leftAction, true);
+			result.setType(LoopType.DO_UNTIL);
+			return result;
 		}
 	}
 
