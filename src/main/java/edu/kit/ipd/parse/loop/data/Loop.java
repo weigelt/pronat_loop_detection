@@ -109,6 +109,27 @@ public class Loop {
 		return out;
 	}
 
+	public String getConditionAsString() {
+		String out = "";
+		int j = 0, old_j = -1;
+		List<INode> condition = keyphrase.getConditionNodes();
+		for (int i = 0; i < condition.size(); i++) {
+			INode nodeToWrite = condition.get(i);
+			if (old_j != j) {
+				out += j + ": ";
+				old_j = j;
+			}
+			out += nodeToWrite.getAttributeValue("value") + " ";
+			if (i + 1 < condition.size()
+					&& (int) nodeToWrite.getAttributeValue("position") < (int) condition.get(i + 1).getAttributeValue("position")) {
+				j++;
+				out.trim();
+				out += ", ";
+			}
+		}
+		return out;
+	}
+
 	public Number getIterations() {
 		return iterations;
 	}
