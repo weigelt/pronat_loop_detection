@@ -18,15 +18,18 @@ import edu.kit.ipd.parse.luna.graph.ParseGraph;
 @MetaInfServices(AbstractAgent.class)
 public class LoopDetectionAgent extends AbstractAgent {
 
+	private static final String NODE_TYPE_TOKEN = "token";
 	private static final String ARC_TYPE_RELATION = "relation";
 	private static final String ARC_TYPE_RELATION_IN_ACTION = "relationInAction";
 	private static final String ARC_TYPE_KEY_PHRASE = "loopKeyPhrase";
 	private static final String ARC_TYPE_DEPENDENT_ACTION = "dependentLoopAction";
-	private static final String NODE_TYPE_CONCURRENT_ACTION = "loop";
+	private static final String ARC_TYPE_CONDITION = "loopCondition";
+	private static final String NODE_TYPE_LOOP = "loop";
 
-	private IArcType keyPhraseType;
-	private IArcType dependentActionType;
-	private INodeType concurrentActionType;
+	private IArcType keyPhraseArcType;
+	private IArcType dependentActionArcType;
+	private IArcType conditionArcType;
+	private INodeType loopNodeType;
 
 	KeyphraseFilter kf;
 	GrammarFilter gf;
@@ -45,9 +48,10 @@ public class LoopDetectionAgent extends AbstractAgent {
 			return;
 		}
 
-		keyPhraseType = createKeyphraseArcType();
-		dependentActionType = createDependentActionArcType();
-		concurrentActionType = createConcurrentActionNodeType();
+		keyPhraseArcType = createKeyphraseArcType();
+		dependentActionArcType = createDependentActionArcType();
+		conditionArcType = createConditionArcType();
+		loopNodeType = createLoopNodeType();
 
 		ParseGraph graphAsParseGraph = (ParseGraph) graph;
 		utterance = new Utterance(graphAsParseGraph);
@@ -64,7 +68,6 @@ public class LoopDetectionAgent extends AbstractAgent {
 	}
 
 	private void writeToGraph(List<Loop> loops) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -78,7 +81,7 @@ public class LoopDetectionAgent extends AbstractAgent {
 	}
 
 	private boolean checkMandatoryPreconditions() {
-		if (graph.hasArcType("relation") && graph.hasArcType("relationInAction")) {
+		if (graph.hasArcType(ARC_TYPE_RELATION) && graph.hasArcType(ARC_TYPE_RELATION_IN_ACTION) && graph.hasNodeType(NODE_TYPE_TOKEN)) {
 			return true;
 		}
 		return false;
@@ -106,15 +109,26 @@ public class LoopDetectionAgent extends AbstractAgent {
 		}
 	}
 
-	private INodeType createConcurrentActionNodeType() {
-		if (!graph.hasNodeType(NODE_TYPE_CONCURRENT_ACTION)) {
-			INodeType cant = graph.createNodeType(NODE_TYPE_CONCURRENT_ACTION);
-			cant.addAttributeToType("String", "keyphrase");
-			cant.addAttributeToType("String", "type");
-			cant.addAttributeToType("String", "dependentPhrases");
-			return cant;
+	private IArcType createConditionArcType() {
+		if (!graph.hasArcType(ARC_TYPE_CONDITION)) {
+			IArcType cat = graph.createArcType(ARC_TYPE_CONDITION);
+			cat.addAttributeToType("String", "verfiedByDA");
+			return cat;
 		} else {
-			return graph.getNodeType(NODE_TYPE_CONCURRENT_ACTION);
+			return graph.getArcType(ARC_TYPE_CONDITION);
+		}
+	}
+
+	private INodeType createLoopNodeType() {
+		if (!graph.hasNodeType(NODE_TYPE_LOOP)) {
+			INodeType lont = graph.createNodeType(NODE_TYPE_LOOP);
+			lont.addAttributeToType("String", "type");
+			lont.addAttributeToType("String", "keyphrase");
+			lont.addAttributeToType("String", "keyphraseType");
+			lont.addAttributeToType("String", "dependentPhrases");
+			return lont;
+		} else {
+			return graph.getNodeType(NODE_TYPE_LOOP);
 		}
 	}
 
