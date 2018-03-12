@@ -14,12 +14,14 @@ public class Keyphrase {
 	public Keyphrase(KeyphraseType priType) {
 		this.priType = priType;
 		this.attachedNodes = new ArrayList<>();
+		this.condition = new ArrayList<>();
 	}
 
 	public Keyphrase(KeyphraseType priType, KeyphraseType secType) {
 		this.priType = priType;
 		this.secType = secType;
 		this.attachedNodes = new ArrayList<>();
+		this.condition = new ArrayList<>();
 	}
 
 	/**
