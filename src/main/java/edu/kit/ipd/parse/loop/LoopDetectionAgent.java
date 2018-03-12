@@ -110,6 +110,7 @@ public class LoopDetectionAgent extends AbstractAgent {
 							currDepArc.setAttributeValue(ATTRIBUTE_NAME_VERFIED_BY_DA, false);
 							currDepArc.setAttributeValue(ATTRIBUTE_NAME_POSITION, j);
 						}
+						addConditionArcs(currLoopNode, currKPtoWrite);
 						//TODO: ADD CONDTION
 					}
 				} else {
@@ -117,22 +118,22 @@ public class LoopDetectionAgent extends AbstractAgent {
 					if (!currKPNode.getIncomingArcsOfType(keyPhraseArcType).isEmpty()) {
 						// we already have keyphrase arc
 						if (currKPNode.getIncomingArcsOfType(keyPhraseArcType).get(0).getSourceNode().getType().equals(loopNodeType)) {
-							// but it points to a node o.0
-							if ((boolean) currKPNode.getIncomingArcsOfType(keyPhraseArcType).get(0)
-									.getAttributeValue(ATTRIBUTE_NAME_VERFIED_BY_DA)) {
-								//TODO: might crash iff "verfiedByDA" is unset
+							// but its source is a loop node
+							Boolean verifiedByDA = (Boolean) currKPNode.getIncomingArcsOfType(keyPhraseArcType).get(0)
+									.getAttributeValue(ATTRIBUTE_NAME_VERFIED_BY_DA);
+							if (verifiedByDA != null && verifiedByDA) {
 								//but it has been verfied by the da
 								cleanUp(currLoopNode);
-								// set the new curr con act node
+								// set the new curr loop node
 								currLoopNode = currKPNode.getIncomingArcsOfType(keyPhraseArcType).get(0).getSourceNode();
-								// we have to clean up the previously build con node
+								// we have to clean up the previously build loop node
 								//TODO: what if null?
 							}
 							// we have to clean up!
 							cleanUp(currKPNode.getIncomingArcsOfType(keyPhraseArcType).get(0).getSourceNode());
 
 						} else if (currKPNode.getIncomingArcsOfType(keyPhraseArcType).get(0).getSourceNode().getType().equals(tokenType)) {
-							//and it points to a token node...
+							//and its source is a token node...
 							if (!currKPNode.getIncomingArcsOfType(keyPhraseArcType).get(0).getSourceNode()
 									.equals(currKPtoWrite.getAttachedNodes().get(i - 1))) {
 								// but it's not the right one
@@ -145,6 +146,86 @@ public class LoopDetectionAgent extends AbstractAgent {
 						// create intermediate arc
 						createKeyPhraseArc(currKPtoWrite.getAttachedNodes().get(i - 1), currKPNode, convertTypeToString(currKPtoWrite));
 					}
+				}
+			}
+		}
+	}
+
+	private void addConditionArcs(INode currLoopNode, Keyphrase currKPtoWrite) {
+		INodeType tokenType = graph.getNodeType(NODE_TYPE_TOKEN);
+		for (int i = 0; i < currKPtoWrite.getConditionNodes().size(); i++) {
+			INode currCondNode = currKPtoWrite.getConditionNodes().get(i);
+			if (i == 0) {
+				if (!currCondNode.getIncomingArcsOfType(conditionArcType).isEmpty()
+						&& currCondNode.getIncomingArcsOfType(conditionArcType).get(0).getSourceNode().getType().equals(loopNodeType)) {
+					// we already have a loop node and this is also the source
+					if (currCondNode.getIncomingArcsOfType(conditionArcType).get(0).getSourceNode().equals(currLoopNode)) {
+						//everything is fine loop condition was already set
+					} else {
+						//TODO: what now? two loop nodes pointing to the same condition
+					}
+				} else {
+					IArc newArc = graph.createArc(currLoopNode, currCondNode, conditionArcType);
+					// create according arc
+					newArc.setAttributeValue(ATTRIBUTE_NAME_VERFIED_BY_DA, false);
+				}
+			} else {
+				// i > 0
+				if (!currCondNode.getIncomingArcsOfType(conditionArcType).isEmpty()) {
+					// we already have a condition arc
+					if (currCondNode.getIncomingArcsOfType(conditionArcType).get(0).getSourceNode().getType().equals(loopNodeType)) {
+						// but its source is a loop node
+						if (currCondNode.getIncomingArcsOfType(conditionArcType).get(0).getSourceNode().equals(currLoopNode)) {
+							// and its our loop
+							Boolean verifiedByDA = (Boolean) currCondNode.getIncomingArcsOfType(conditionArcType).get(0)
+									.getAttributeValue(ATTRIBUTE_NAME_VERFIED_BY_DA);
+							if (verifiedByDA != null && verifiedByDA) {
+								//but it has been verfied by the da
+								cleanUpCondition(currLoopNode, currCondNode);
+								// we have to clean up the previously build loop node
+								//TODO: what if null?
+							} else {
+								graph.deleteArc(currCondNode.getIncomingArcsOfType(conditionArcType).get(0));
+							}
+						} else {
+							//TODO: what now?
+						}
+
+					} else if (currCondNode.getIncomingArcsOfType(conditionArcType).get(0).getSourceNode().getType().equals(tokenType)) {
+						//and its source is a token node...
+						if (!currCondNode.getIncomingArcsOfType(conditionArcType).get(0).getSourceNode()
+								.equals(currKPtoWrite.getConditionNodes().get(i - 1))) {
+							// but it's not the right one
+							// TODO: what now? Throw an exception?
+						}
+						// it's the right node... everything's fine!
+					}
+				} else {
+					// that's the good case. We simply add a new arc from the first to the next node of the keyphrase
+					// create intermediate arc
+					createConditionArc(currKPtoWrite.getConditionNodes().get(i - 1), currCondNode);
+				}
+			}
+		}
+	}
+
+	private void cleanUpCondition(INode currLoopNode, INode currCondNode) {
+		if (currLoopNode == null) {
+			return;
+		}
+		List<? extends IArc> outgoing = currLoopNode.getOutgoingArcsOfType(conditionArcType);
+		if (outgoing.size() == 2) {
+			IArc notVerifiedArc = outgoing.get(0).getTargetNode().equals(currCondNode) ? outgoing.get(1) : outgoing.get(0);
+			INode prev = notVerifiedArc.getTargetNode();
+			graph.deleteArc(notVerifiedArc);
+			while (!prev.getOutgoingArcsOfType(conditionArcType).isEmpty() && !prev.equals(currCondNode)) {
+
+				if (prev.getOutgoingArcsOfType(conditionArcType).size() == 1) {
+					IArc arc = prev.getOutgoingArcsOfType(conditionArcType).get(0);
+					prev = arc.getTargetNode();
+					graph.deleteArc(arc);
+				} else {
+					//TODO: What now?
 				}
 			}
 		}
@@ -163,7 +244,7 @@ public class LoopDetectionAgent extends AbstractAgent {
 
 			while (nextNode.getIncomingArcsOfType(keyPhraseArcType).size() < 1) {
 				// we stop when the node has more than one incomming keyphrase arcs,
-				// i.e. it has one that comes from a conc Action node and one that comes from a token
+				// i.e. it has one that comes from a loop node and one that comes from a token
 				// (this one was deleted in the step before)
 				IArc nextArc = nextNode.getOutgoingArcsOfType(keyPhraseArcType).get(0);
 				nextNode = nextArc.getTargetNode();
@@ -177,6 +258,13 @@ public class LoopDetectionAgent extends AbstractAgent {
 		// create according arc
 		newArc.setAttributeValue("verfiedByDA", false);
 		newArc.setAttributeValue("type", type);
+	}
+
+	private void createConditionArc(INode from, INode to) {
+		IArc newArc = graph.createArc(from, to, conditionArcType);
+		// create according arc
+		newArc.setAttributeValue("verfiedByDA", false);
+
 	}
 
 	/**
