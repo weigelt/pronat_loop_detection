@@ -105,7 +105,7 @@ public class GrammarFilter {
 		return null;
 	}
 
-	private static boolean hasIncomingInsideChunkArcs(INode start) {
+	static boolean hasIncomingInsideChunkArcs(INode start) {
 		List<? extends IArc> actionArcs;
 		if (!(actionArcs = start.getIncomingArcsOfType(actionAnalyzerArcType)).isEmpty()) {
 			if (actionArcs.get(0).getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_TYPE).toString().equals(ATTRIBUTE_VALUE_INSIDE_CHUNK)) {
