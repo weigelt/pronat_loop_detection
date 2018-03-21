@@ -1,6 +1,7 @@
 package edu.kit.ipd.parse.loop;
 
 import java.util.List;
+import java.util.Properties;
 
 import org.kohsuke.MetaInfServices;
 
@@ -8,6 +9,7 @@ import edu.kit.ipd.parse.loop.data.Keyphrase;
 import edu.kit.ipd.parse.loop.data.KeyphraseType;
 import edu.kit.ipd.parse.loop.data.Loop;
 import edu.kit.ipd.parse.loop.data.Utterance;
+import edu.kit.ipd.parse.loop.filter.CorefExtender;
 import edu.kit.ipd.parse.loop.filter.GrammarFilter;
 import edu.kit.ipd.parse.loop.filter.KeyphraseFilter;
 import edu.kit.ipd.parse.luna.agent.AbstractAgent;
@@ -17,6 +19,7 @@ import edu.kit.ipd.parse.luna.graph.IArcType;
 import edu.kit.ipd.parse.luna.graph.INode;
 import edu.kit.ipd.parse.luna.graph.INodeType;
 import edu.kit.ipd.parse.luna.graph.ParseGraph;
+import edu.kit.ipd.parse.luna.tools.ConfigManager;
 
 @MetaInfServices(AbstractAgent.class)
 public class LoopDetectionAgent extends AbstractAgent {
@@ -44,13 +47,19 @@ public class LoopDetectionAgent extends AbstractAgent {
 
 	KeyphraseFilter kf;
 	GrammarFilter gf;
+	CorefExtender ce;
 	Utterance utterance;
 	List<Loop> loops;
+	private boolean corefEnabled = false;
 
 	@Override
 	public void init() {
 		kf = new KeyphraseFilter();
 		gf = new GrammarFilter();
+		ce = new CorefExtender();
+		Properties props = ConfigManager.getConfiguration(getClass());
+		corefEnabled = Boolean.parseBoolean(props.getProperty("COREF", "false"));
+
 	}
 
 	@Override
@@ -69,6 +78,9 @@ public class LoopDetectionAgent extends AbstractAgent {
 		List<Keyphrase> keywords = kf.filter(utterance.giveUtteranceAsNodeList());
 		try {
 			loops = gf.filter(keywords);
+			if (corefEnabled) {
+				ce.extendBlocks(loops, utterance);
+			}
 		} catch (MissingDataException e) {
 			//TODO Logger and return!
 			// TODO Auto-generated catch block
