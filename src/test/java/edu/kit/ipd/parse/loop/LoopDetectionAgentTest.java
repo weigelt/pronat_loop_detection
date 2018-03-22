@@ -354,7 +354,7 @@ public class LoopDetectionAgentTest {
 
 	@Ignore("TODO")
 	@Test
-	public void whileEndingTest3() {
+	public void whileEndingTest4() {
 		ppd = new PrePipelineData();
 		//@formatter:off
 		String input = "take a piece of dishware out of the dishwasher if its not empty then take the others out one by one till the dishwasher is empty";
@@ -388,7 +388,7 @@ public class LoopDetectionAgentTest {
 
 	@Ignore("TODO")
 	@Test
-	public void whileEndingTest4() {
+	public void whileEndingTest5() {
 		ppd = new PrePipelineData();
 		//@formatter:off
 		String input = "empty the dishwasher which is at the left side of the kitchen therefore you have to take out each peace of dishware till its empty the dishwasher needs to be opened before that";
