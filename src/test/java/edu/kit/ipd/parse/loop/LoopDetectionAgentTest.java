@@ -284,12 +284,12 @@ public class LoopDetectionAgentTest {
 				loop.getDependentPhrases().get(loop.getDependentPhrases().size() - 1).getAttributeValue("position"));
 	}
 
-	@Ignore("TODO")
+	@Ignore("one after another not in span")
 	@Test
 	public void whileEndingTest2() {
 		ppd = new PrePipelineData();
 		//@formatter:off
-		String input = "I want you to empty the dishwasher you need to open it first then grab the dishes out one after another until its empty";
+		String input = "I want you to empty the dishwasher you need to open it first then grab the dishes out one after another until it is empty";
 		//@formatter:on
 		ppd.setMainHypothesis(StringToHypothesis.stringToMainHypothesis(input, true));
 
@@ -305,25 +305,25 @@ public class LoopDetectionAgentTest {
 			Assert.assertEquals(expected[i], node.getAttributeValue("value").toString());
 			i++;
 		}
-		String[] expectedCondition = new String[] { "its", "empty" };
+		String[] expectedCondition = new String[] { "it", "is", "empty" };
 		i = 0;
 		for (INode node : loop.getKeyphrase().getConditionNodes()) {
 			Assert.assertEquals(expectedCondition[i], node.getAttributeValue("value").toString());
 			i++;
 		}
 		//Assert.assertEquals(new Integer(2), loop.getIterations());
-		int[] expectedSpan = new int[] { 13, 17 };
+		int[] expectedSpan = new int[] { 13, 20 };
 		Assert.assertEquals(expectedSpan[0], loop.getDependentPhrases().get(0).getAttributeValue("position"));
 		Assert.assertEquals(expectedSpan[1],
 				loop.getDependentPhrases().get(loop.getDependentPhrases().size() - 1).getAttributeValue("position"));
 	}
 
-	@Ignore("TODO")
+	@Ignore("NPB VP NEG ADJP")
 	@Test
 	public void whileEndingTest3() {
 		ppd = new PrePipelineData();
 		//@formatter:off
-		String input = "go to the dishwasher and open it as long as the dishwasher isnt empty take a dish out of it and store it";
+		String input = "go to the dishwasher and open it as long as the dishwasher is not empty take a dish out of it and store it";
 		//@formatter:on
 		ppd.setMainHypothesis(StringToHypothesis.stringToMainHypothesis(input, true));
 
@@ -339,14 +339,14 @@ public class LoopDetectionAgentTest {
 			Assert.assertEquals(expected[i], node.getAttributeValue("value").toString());
 			i++;
 		}
-		String[] expectedCondition = new String[] { "isnt", "empty" };
+		String[] expectedCondition = new String[] { "the", "dishwasher", "is", "not", "empty" };
 		i = 0;
 		for (INode node : loop.getKeyphrase().getConditionNodes()) {
 			Assert.assertEquals(expectedCondition[i], node.getAttributeValue("value").toString());
 			i++;
 		}
 		//Assert.assertEquals(new Integer(2), loop.getIterations());
-		int[] expectedSpan = new int[] { 14, 22 };
+		int[] expectedSpan = new int[] { 15, 23 };
 		Assert.assertEquals(expectedSpan[0], loop.getDependentPhrases().get(0).getAttributeValue("position"));
 		Assert.assertEquals(expectedSpan[1],
 				loop.getDependentPhrases().get(loop.getDependentPhrases().size() - 1).getAttributeValue("position"));
@@ -357,33 +357,33 @@ public class LoopDetectionAgentTest {
 	public void whileEndingTest4() {
 		ppd = new PrePipelineData();
 		//@formatter:off
-		String input = "take a piece of dishware out of the dishwasher if its not empty then take the others out one by one till the dishwasher is empty";
+		String input = "take a piece of dishware out of the dishwasher if it is not empty then take the others out one by one till the dishwasher is empty";
 		//@formatter:on
 		ppd.setMainHypothesis(StringToHypothesis.stringToMainHypothesis(input, true));
 
-	// 	IGraph graph = executePreviousStages(ppd);
-	// 	loopDetectAgent.setGraph(graph);
-	// 	loopDetectAgent.exec();
-	// 	List<Loop> loops = loopDetectAgent.getLoops();
-	// 	Assert.assertEquals(1, loops.size());
-	// 	Loop loop = loops.get(0);
-	// 	String[] expected = new String[] { "till", "one", "by", "one"}; // hier unklar
-	// 	int i = 0;
-	// 	for (INode node : loop.getKeyphrase().getAttachedNodes()) {
-	// 		Assert.assertEquals(expected[i], node.getAttributeValue("value").toString());
-	// 		i++;
-	// 	}
-	// 	String[] expectedCondition = new String[] { "the", "dishwasher", "is", "empty" }; // hier unklar
-	// 	i = 0;
-	// 	for (INode node : loop.getKeyphrase().getConditionNodes()) {
-	// 		Assert.assertEquals(expectedCondition[i], node.getAttributeValue("value").toString());
-	// 		i++;
-	// 	}
-	// 	//Assert.assertEquals(new Integer(2), loop.getIterations());
-	// 	int[] expectedSpan = new int[] { 0, 8 };
-	// 	Assert.assertEquals(expectedSpan[0], loop.getDependentPhrases().get(0).getAttributeValue("position"));
-	// 	Assert.assertEquals(expectedSpan[1],
-	// 			loop.getDependentPhrases().get(loop.getDependentPhrases().size() - 1).getAttributeValue("position"));
+		// 	IGraph graph = executePreviousStages(ppd);
+		// 	loopDetectAgent.setGraph(graph);
+		// 	loopDetectAgent.exec();
+		// 	List<Loop> loops = loopDetectAgent.getLoops();
+		// 	Assert.assertEquals(1, loops.size());
+		// 	Loop loop = loops.get(0);
+		// 	String[] expected = new String[] { "till", "one", "by", "one"}; // hier unklar
+		// 	int i = 0;
+		// 	for (INode node : loop.getKeyphrase().getAttachedNodes()) {
+		// 		Assert.assertEquals(expected[i], node.getAttributeValue("value").toString());
+		// 		i++;
+		// 	}
+		// 	String[] expectedCondition = new String[] { "the", "dishwasher", "is", "empty" }; // hier unklar
+		// 	i = 0;
+		// 	for (INode node : loop.getKeyphrase().getConditionNodes()) {
+		// 		Assert.assertEquals(expectedCondition[i], node.getAttributeValue("value").toString());
+		// 		i++;
+		// 	}
+		// 	//Assert.assertEquals(new Integer(2), loop.getIterations());
+		// 	int[] expectedSpan = new int[] { 0, 8 };
+		// 	Assert.assertEquals(expectedSpan[0], loop.getDependentPhrases().get(0).getAttributeValue("position"));
+		// 	Assert.assertEquals(expectedSpan[1],
+		// 			loop.getDependentPhrases().get(loop.getDependentPhrases().size() - 1).getAttributeValue("position"));
 	}
 
 	@Ignore("TODO")
@@ -391,7 +391,7 @@ public class LoopDetectionAgentTest {
 	public void whileEndingTest5() {
 		ppd = new PrePipelineData();
 		//@formatter:off
-		String input = "empty the dishwasher which is at the left side of the kitchen therefore you have to take out each peace of dishware till its empty the dishwasher needs to be opened before that";
+		String input = "empty the dishwasher which is at the left side of the kitchen therefore you have to take out each peace of dishware till it is empty the dishwasher needs to be opened before that";
 		//@formatter:on
 		ppd.setMainHypothesis(StringToHypothesis.stringToMainHypothesis(input, true));
 
@@ -401,13 +401,13 @@ public class LoopDetectionAgentTest {
 		List<Loop> loops = loopDetectAgent.getLoops();
 		Assert.assertEquals(1, loops.size());
 		Loop loop = loops.get(0);
-		String[] expected = new String[] { "till" }; 
+		String[] expected = new String[] { "till" };
 		int i = 0;
 		for (INode node : loop.getKeyphrase().getAttachedNodes()) {
 			Assert.assertEquals(expected[i], node.getAttributeValue("value").toString());
 			i++;
 		}
-		String[] expectedCondition = new String[] { "its", "empty" };
+		String[] expectedCondition = new String[] { "it", "is", "empty" };
 		i = 0;
 		for (INode node : loop.getKeyphrase().getConditionNodes()) {
 			Assert.assertEquals(expectedCondition[i], node.getAttributeValue("value").toString());
