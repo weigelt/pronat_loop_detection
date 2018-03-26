@@ -9,7 +9,7 @@ import edu.kit.ipd.parse.luna.graph.INode;
 
 public class StatementExtractor {
 
-	private static final List<String> NOUN_BLOCK = Arrays.asList("NP", "[CC]");
+	private static final List<String> NOUN_BLOCK = Arrays.asList("NP", "[CC]", "[RB]");
 	private static final List<String> VERB_PHRASE = Arrays.asList("VP");
 	private static final List<String> ADJP_PHRASE = Arrays.asList("ADJP");
 
@@ -48,7 +48,7 @@ public class StatementExtractor {
 			boolean isOfType = false;
 			for (String chunktype : chunktypes) {
 				String posTag = posTag(chunktype);
-				if ((posTag != null && nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_POS).equals(posTag))
+				if (posTag != null && nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_NAME_POS).equals(posTag)
 						|| nextNode.getAttributeValue(GrammarFilter.ATTRIBUTE_CHUNK_NAME).equals(chunktype)) {
 					isOfType = true;
 				}
