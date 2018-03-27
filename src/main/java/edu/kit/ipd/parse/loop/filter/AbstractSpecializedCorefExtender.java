@@ -250,11 +250,14 @@ public abstract class AbstractSpecializedCorefExtender implements ISpecializedCo
 		}
 	}
 
-	private Set<IArc> filterReferentRelations(List<? extends IArc> relations) {
+	private Set<IArc> filterReferentRelations(List<? extends IArc> relations) throws MissingDataException {
 		Set<IArc> referentRelations = new HashSet<>();
 		for (IArc relation : relations) {
 			if (relation.getAttributeValue(CorefExtender.RELATION_TYPE_NAME).equals(CorefExtender.REFERENT_RELATION_TYPE)
-					&& relation.getAttributeValue(CorefExtender.REFERENT_RELATION_ROLE_NAME).equals(CorefExtender.ANAPHORA_NAME_VALUE)) {
+					&& (relation.getAttributeValue(CorefExtender.REFERENT_RELATION_ROLE_NAME).equals(CorefExtender.ANAPHORA_NAME_VALUE)
+							|| relation.getAttributeValue(CorefExtender.REFERENT_RELATION_ROLE_NAME)
+									.equals(CorefExtender.OBJECT_IDENTITY_NAME_VALUE))
+					&& checkInstructionNumberBoundary(relation.getTargetNode(), relation.getSourceNode())) {
 				if (isMostLikelyReferent(relation, relation.getSourceNode())) {
 					referentRelations.add(relation);
 				}
@@ -262,6 +265,17 @@ public abstract class AbstractSpecializedCorefExtender implements ISpecializedCo
 			}
 		}
 		return referentRelations;
+	}
+
+	private boolean checkInstructionNumberBoundary(INode entityOne, INode entityTwo) {
+		INode refNodeOne, refNodeTwo;
+		refNodeOne = entityOne.getOutgoingArcsOfType(CorefExtender.entityReferenceArcType).get(0).getTargetNode();
+		refNodeTwo = entityTwo.getOutgoingArcsOfType(CorefExtender.entityReferenceArcType).get(0).getTargetNode();
+
+		if (refNodeOne != null && refNodeTwo != null) {
+			return Math.abs(GrammarFilter.getInstructionNumber(refNodeOne) - GrammarFilter.getInstructionNumber(refNodeTwo)) <= 2;
+		}
+		return false;
 	}
 
 	private boolean isMostLikelyReferent(IArc relation, INode sourceNode) {
