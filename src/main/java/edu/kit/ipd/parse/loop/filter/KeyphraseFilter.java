@@ -92,7 +92,7 @@ public class KeyphraseFilter {
 
 	private Keyphrase recursiveKeyphraseFind(List<INode> utteranceAsNodeList, int nodeIndex, List<String> keyphrase, int kpIndex,
 			Keyphrase result) {
-		if (utteranceAsNodeList.size() >= nodeIndex || kpIndex >= keyphrase.size()) {
+		if (utteranceAsNodeList.size() > nodeIndex || kpIndex >= keyphrase.size()) {
 			INode currNode = utteranceAsNodeList.get(nodeIndex);
 			String pos = posTag(keyphrase.get(kpIndex));
 			if (currNode.getAttributeValue("value").toString().equalsIgnoreCase(keyphrase.get(kpIndex))
