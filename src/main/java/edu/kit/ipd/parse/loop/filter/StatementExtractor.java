@@ -9,8 +9,8 @@ import edu.kit.ipd.parse.luna.graph.INode;
 
 public class StatementExtractor {
 
-	private static final List<String> NOUN_BLOCK = Arrays.asList("NP", "[CC]", "[RB]");
-	private static final List<String> VERB_PHRASE = Arrays.asList("VP");
+	private static final List<String> NOUN_BLOCK = Arrays.asList("NP", "[CC]");
+	private static final List<String> VERB_PHRASE = Arrays.asList("VP", "[RB]");
 	private static final List<String> ADJP_PHRASE = Arrays.asList("ADJP");
 
 	public static boolean extract(Keyphrase keyphrase) {
