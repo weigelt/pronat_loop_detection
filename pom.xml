@@ -3,10 +3,10 @@
   <parent>
     <groupId>edu.kit.ipd.parse</groupId>
     <artifactId>parse</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
   </parent>
   <artifactId>loop_detection</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <name>PARSE agent implementation that detects loops</name>
   <repositories>
 		<repository>
