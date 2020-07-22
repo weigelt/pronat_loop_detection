@@ -24,6 +24,8 @@ import edu.kit.ipd.parse.luna.tools.ConfigManager;
 @MetaInfServices(AbstractAgent.class)
 public class LoopDetectionAgent extends AbstractAgent {
 
+	private static final String ID = "loop";
+
 	private static final String NODE_TYPE_TOKEN = "token";
 	private static final String ARC_TYPE_RELATION = "relation";
 	private static final String ARC_TYPE_RELATION_IN_ACTION = "relationInAction";
@@ -51,6 +53,10 @@ public class LoopDetectionAgent extends AbstractAgent {
 	Utterance utterance;
 	List<Loop> loops;
 	private boolean corefEnabled = false;
+
+	public LoopDetectionAgent() {
+		setId(ID);
+	}
 
 	@Override
 	public void init() {
