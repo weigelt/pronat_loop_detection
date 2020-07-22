@@ -6,7 +6,7 @@
     <version>0.0.4</version>
   </parent>
   <artifactId>loop_detection</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3-SNAPSHOT</version>
   <name>PARSE agent implementation that detects loops</name>
   <repositories>
 		<repository>
