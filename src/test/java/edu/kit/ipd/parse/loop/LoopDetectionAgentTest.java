@@ -87,7 +87,8 @@ public class LoopDetectionAgentTest {
 	public void forLoopTest() {
 		ppd = new PrePipelineData();
 		//@formatter:off
-		String input = "the dog jumps and the horse looks twice";
+//		String input = "the dog jumps and the horse looks twice";
+		String input = "get the cup and wave your hand twice";
 		//@formatter:on
 		ppd.setMainHypothesis(StringToHypothesis.stringToMainHypothesis(input, true));
 
@@ -114,7 +115,8 @@ public class LoopDetectionAgentTest {
 	public void forLoopTimesTest() {
 		ppd = new PrePipelineData();
 		//@formatter:off
-		String input = "the dog jumps and the horse looks two times";
+//		String input = "the dog jumps and the horse looks two times";
+		String input = "get the cup and wave your hand two times";
 		//@formatter:on
 		ppd.setMainHypothesis(StringToHypothesis.stringToMainHypothesis(input, true));
 
