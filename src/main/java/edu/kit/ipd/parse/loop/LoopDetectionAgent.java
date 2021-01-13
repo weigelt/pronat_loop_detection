@@ -304,7 +304,7 @@ public class LoopDetectionAgent extends AbstractAgent {
 	private IArcType createKeyphraseArcType() {
 		if (!graph.hasArcType(ARC_TYPE_KEY_PHRASE)) {
 			IArcType kpat = graph.createArcType(ARC_TYPE_KEY_PHRASE);
-			kpat.addAttributeToType("String", ATTRIBUTE_NAME_VERFIED_BY_DA);
+			kpat.addAttributeToType("boolean", ATTRIBUTE_NAME_VERFIED_BY_DA);
 			kpat.addAttributeToType("String", ATTRIBUTE_NAME_TYPE);
 			return kpat;
 		} else {
@@ -316,7 +316,7 @@ public class LoopDetectionAgent extends AbstractAgent {
 		if (!graph.hasArcType(ARC_TYPE_DEPENDENT_ACTION)) {
 			IArcType daat = graph.createArcType(ARC_TYPE_DEPENDENT_ACTION);
 			daat.addAttributeToType("int", ATTRIBUTE_NAME_POSITION);
-			daat.addAttributeToType("String", ATTRIBUTE_NAME_VERFIED_BY_DA);
+			daat.addAttributeToType("boolean", ATTRIBUTE_NAME_VERFIED_BY_DA);
 			return daat;
 		} else {
 			return graph.getArcType(ARC_TYPE_DEPENDENT_ACTION);
@@ -326,7 +326,7 @@ public class LoopDetectionAgent extends AbstractAgent {
 	private IArcType createConditionArcType() {
 		if (!graph.hasArcType(ARC_TYPE_CONDITION)) {
 			IArcType cat = graph.createArcType(ARC_TYPE_CONDITION);
-			cat.addAttributeToType("String", ATTRIBUTE_NAME_VERFIED_BY_DA);
+			cat.addAttributeToType("boolean", ATTRIBUTE_NAME_VERFIED_BY_DA);
 			return cat;
 		} else {
 			return graph.getArcType(ARC_TYPE_CONDITION);
