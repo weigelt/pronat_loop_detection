@@ -3,13 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>edu.kit.ipd.parse</groupId>
-        <artifactId>parse</artifactId>
-        <version>0.0.5-SNAPSHOT</version>
+        <groupId>edu.kit.ipd.pronat</groupId>
+        <artifactId>pronat</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>loop_detection</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
-    <name>PARSE agent implementation that detects loops</name>
+    <version>0.0.4-SNAPSHOT</version>
+    <name>Loop Detector</name>
+    <description>ProNat agent implementation that detects loops</description>
     <repositories>
         <repository>
             <id>ipdNexus-public-releases</id>
@@ -23,7 +24,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
-                    <outputDirectory>${parse_bundle.directory}/plugins</outputDirectory>
+                    <outputDirectory>${pronat_bundle.directory}/plugins</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
@@ -37,7 +38,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${parse_bundle.directory}/plugins/libs
+                            <outputDirectory>${pronat_bundle.directory}/plugins/libs
                             </outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
@@ -56,6 +57,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>edu.kit.ipd.pronat</groupId>
+            <artifactId>pre_pipeline_data_model</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.kit.ipd.parse</groupId>
+            <artifactId>ontology_connection</artifactId>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -65,47 +75,46 @@
             <artifactId>metainf-services</artifactId>
         </dependency>
         <dependency>
-            <groupId>edu.kit.ipd.parse</groupId>
-            <artifactId>ShallowNLP</artifactId>
+            <groupId>edu.kit.ipd.pronat</groupId>
+            <artifactId>shallow_nlp</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>edu.kit.ipd.parse</groupId>
-            <artifactId>graphBuilder</artifactId>
+            <groupId>edu.kit.ipd.pronat</groupId>
+            <artifactId>graph_builder</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>edu.kit.ipd.parse</groupId>
-            <artifactId>actionRecognizer</artifactId>
+            <groupId>edu.kit.ipd.pronat</groupId>
+            <artifactId>action_analyzer</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>edu.kit.ipd.parse</groupId>
-            <artifactId>SRLabeler</artifactId>
+            <groupId>edu.kit.ipd.pronat</groupId>
+            <artifactId>srl</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>edu.kit.ipd.parse</groupId>
+            <groupId>edu.kit.ipd.pronat</groupId>
             <artifactId>ner</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>edu.kit.ipd.parse</groupId>
-            <artifactId>stanford_number_normalizer</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
         </dependency>
         <dependency>
-            <groupId>edu.kit.ipd.parse</groupId>
+            <groupId>edu.kit.ipd.pronat</groupId>
             <artifactId>coref</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>edu.kit.ipd.parse</groupId>
+            <groupId>edu.kit.ipd.pronat</groupId>
             <artifactId>context</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
     <properties>
-        <parse_bundle.directory>../parse_bundle</parse_bundle.directory>
+        <pronat_bundle.directory>../pronat_bundle</pronat_bundle.directory>
     </properties>
 </project>
