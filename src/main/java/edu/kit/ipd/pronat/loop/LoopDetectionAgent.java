@@ -190,6 +190,7 @@ public class LoopDetectionAgent extends AbstractAgent {
 						//everything is fine loop condition was already set
 					} else {
 						//TODO: what now? two loop nodes pointing to the same condition
+						logger.warn("Two loop nodes point to the same condition!");
 					}
 				} else {
 					IArc newArc = graph.createArc(currLoopNode, currCondNode, conditionArcType);
@@ -224,6 +225,7 @@ public class LoopDetectionAgent extends AbstractAgent {
 								.equals(currKPtoWrite.getConditionNodes().get(i - 1))) {
 							// but it's not the right one
 							// TODO: what now? Throw an exception?
+							logger.warn("Visited unexpected node during graph analysis: {}", currKPtoWrite.getAttachedNodes().get(i - 1));
 						}
 						// it's the right node... everything's fine!
 					}
