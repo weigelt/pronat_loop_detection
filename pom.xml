@@ -11,13 +11,6 @@
     <version>0.0.4-SNAPSHOT</version>
     <name>Loop Detector</name>
     <description>ProNat agent implementation that detects loops</description>
-    <repositories>
-        <repository>
-            <id>ipdNexus-public-all</id>
-            <name>IPD-Repository</name>
-            <url>https://bob.ipd.kit.edu/nexus/repository/maven-public-all</url>
-        </repository>
-    </repositories>
     <build>
         <plugins>
             <plugin>
